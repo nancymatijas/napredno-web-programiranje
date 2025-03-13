@@ -1,0 +1,6 @@
+{
+    "require": {
+        "simplehtmldom/simplehtmldom": "2.0-RC2",
+        "sunra/php-simple-html-dom-parser": "^1.5"
+    }
+}
