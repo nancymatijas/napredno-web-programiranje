@@ -1,1 +1,2 @@
-# napredno-web-programiranje
+# Napredno Web programiranje
+## Laboratorijske vježbe
