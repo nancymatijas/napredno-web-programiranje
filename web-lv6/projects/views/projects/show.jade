@@ -1,0 +1,22 @@
+extends ../layout
+
+block content
+  .container.mt-5
+    h1.text-center.mb-4= project.name
+    .card
+      .card-body
+        p Opis: 
+          span.text-muted #{project.description}
+        p Cijena: 
+          span.text-muted #{project.price} HRK
+        p Obavljeni poslovi: 
+          span.text-muted #{project.tasksCompleted}
+        p Datum početka: 
+          span.text-muted #{project.startDate.toLocaleDateString()}
+        p Datum završetka: 
+          span.text-muted #{project.endDate ? project.endDate.toLocaleDateString() : 'N/A'}
+        h3.mt-4 Članovi tima:
+        ul.list-group
+          each member in project.teamMembers
+            li.list-group-item= member
+    a.btn.btn-primary.mt-4(href="/projects") Povratak na listu projekata

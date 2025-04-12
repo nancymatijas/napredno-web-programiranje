@@ -1,0 +1,27 @@
+extends ../layout
+
+block content
+  h1.text-center Uredi projekt
+  form(method="POST" action="/projects/#{project._id}?_method=PUT")
+    .mb-3
+      label.form-label Naziv:
+      input.form-control(type="text" name="name" value=project.name required)
+    .mb-3
+      label.form-label Opis:
+      textarea.form-control(name="description")= project.description
+    .mb-3
+      label.form-label Cijena:
+      input.form-control(type="number" name="price" value=project.price)
+    .mb-3
+      label.form-label Obavljeni poslovi:
+      input.form-control(type="text" name="tasksCompleted" value=project.tasksCompleted)
+    .mb-3
+      label.form-label Datum početka:
+      input.form-control(type="date" name="startDate" value=project.startDate.toISOString().substring(0,10))
+    .mb-3
+      label.form-label Datum završetka:
+      input.form-control(type="date" name="endDate" value=project.endDate ? project.endDate.toISOString().substring(0,10) : '')
+    .mb-3
+      label.form-label Članovi tima (odvojeni zarezom):
+      input.form-control(type="text" name="teamMembers" value=project.teamMembers.join(', '))
+    button.btn.btn-success(type="submit") Spremi promjene

@@ -1,0 +1,27 @@
+extends ../layout
+
+block content
+  h1.text-center Novi projekt
+  form(method="POST" action="/projects")
+    .mb-3
+      label.form-label Naziv:
+      input.form-control(type="text" name="name" required)
+    .mb-3
+      label.form-label Opis:
+      textarea.form-control(name="description")
+    .mb-3
+      label.form-label Cijena:
+      input.form-control(type="number" name="price")
+    .mb-3
+      label.form-label Obavljeni poslovi:
+      input.form-control(type="text" name="tasksCompleted")
+    .mb-3
+      label.form-label Datum početka:
+      input.form-control(type="date" name="startDate")
+    .mb-3
+      label.form-label Datum završetka:
+      input.form-control(type="date" name="endDate")
+    .mb-3
+      label.form-label Članovi tima (odvojeni zarezom):
+      input.form-control(type="text" name="teamMembers")
+    button.btn.btn-success(type="submit") Spremi projekt

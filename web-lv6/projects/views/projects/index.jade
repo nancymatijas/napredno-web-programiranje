@@ -1,0 +1,23 @@
+extends ../layout
+
+block content
+  h1.text-center Projekti
+  a.btn.btn-primary(href="/projects/new") Novi projekt
+  table.table.table-striped.table-bordered.mt-4
+    thead
+      tr
+        th Naziv
+        th Cijena
+        th Početak
+        th Akcije
+    tbody
+      each project in projects
+        tr
+          td= project.name
+          td= project.price
+          td= project.startDate.toLocaleDateString()
+          td.d-flex.justify-content-center
+            a.btn.btn-info.me-2(href='/projects/' + project._id) Pregled
+            a.btn.btn-warning.me-2(href='/projects/' + project._id + '/edit') Uredi
+            form(action='/projects/' + project._id + '?_method=DELETE', method="POST")
+              button.btn.btn-danger(type="submit") Obriši
