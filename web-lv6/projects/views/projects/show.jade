@@ -1,22 +1,30 @@
 extends ../layout
 
 block content
-  .container.mt-5
-    h1.text-center.mb-4= project.name
-    .card
-      .card-body
-        p Opis: 
-          span.text-muted #{project.description}
-        p Cijena: 
-          span.text-muted #{project.price} HRK
-        p Obavljeni poslovi: 
-          span.text-muted #{project.tasksCompleted}
-        p Datum početka: 
-          span.text-muted #{project.startDate.toLocaleDateString()}
-        p Datum završetka: 
-          span.text-muted #{project.endDate ? project.endDate.toLocaleDateString() : 'N/A'}
-        h3.mt-4 Članovi tima:
-        ul.list-group
-          each member in project.teamMembers
-            li.list-group-item= member
-    a.btn.btn-primary.mt-4(href="/projects") Povratak na listu projekata
+  include ../includes/nav
+  
+  h1= project.name
+  .card.mb-4
+    .card-header Osnovne informacije
+    .card-body
+      p Opis: #{project.description || 'Nije dostupno'}
+      p Cijena: #{project.price || 'Nije dostupno'}
+      p Obavljeni poslovi: #{project.tasksCompleted || 'Nema podataka'}
+      p Početak: #{project.startDate.toLocaleDateString()}
+      p Kraj: #{project.endDate.toLocaleDateString()}
+      p Status arhiviranosti:
+        if project.archived
+          span.badge.badge-light.text-dark Arhivirano
+        else
+          span.badge.badge-light.text-dark Aktivno
+
+  .card.mb-4
+    .card-header Tim
+    .card-body
+      if project.teamMembers && project.teamMembers.length > 0
+        each member in project.teamMembers
+          .badge.badge-light.text-dark.mr-2= member.username || 'Nepoznato'
+      else
+        p.alert.alert-info Nema dodanih članova tima
+
+  a.btn.btn-primary(href="/projects") Povratak na listu projekata

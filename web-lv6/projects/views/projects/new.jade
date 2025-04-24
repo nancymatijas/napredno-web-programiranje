@@ -1,6 +1,8 @@
 extends ../layout
 
 block content
+  include ../includes/nav
+  
   h1.text-center Novi projekt
   form(method="POST" action="/projects")
     .mb-3
@@ -11,17 +13,24 @@ block content
       textarea.form-control(name="description")
     .mb-3
       label.form-label Cijena:
-      input.form-control(type="number" name="price")
+      input.form-control(type="number" name="price" required)
     .mb-3
       label.form-label Obavljeni poslovi:
       input.form-control(type="text" name="tasksCompleted")
     .mb-3
       label.form-label Datum početka:
-      input.form-control(type="date" name="startDate")
+      input.form-control(type="date" name="startDate" required)
     .mb-3
       label.form-label Datum završetka:
-      input.form-control(type="date" name="endDate")
+      input.form-control(type="date" name="endDate" required)
     .mb-3
-      label.form-label Članovi tima (odvojeni zarezom):
-      input.form-control(type="text" name="teamMembers")
+      label.form-label Članovi tima:
+      each user in users
+        .form-check
+          input.form-check-input(
+            type="checkbox"
+            name="teamMembers[]"
+            value=user._id
+          )
+          label.form-check-label= user.username
     button.btn.btn-success(type="submit") Spremi projekt

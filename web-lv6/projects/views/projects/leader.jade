@@ -1,0 +1,38 @@
+extends ../layout
+
+block content
+  include ../includes/nav
+  
+  .container.mt-4
+    h1.text-center.mb-4 Moji projekti kao voditelj
+    .d-flex.justify-content-between.mb-3
+      a.btn.btn-secondary(href="/projects") ← Povratak na sve projekte
+    
+    if projects.length > 0
+      table.table.table-striped.table-bordered
+        thead
+          tr
+            th Naziv
+            th Cijena
+            th Početak
+            th Tim
+            th Akcije
+        tbody
+          each project in projects
+            tr
+              td= project.name
+              td= project.price
+              td= project.startDate.toLocaleDateString()
+              td
+                if project.teamMembers && project.teamMembers.length > 0
+                  each member in project.teamMembers
+                    span.badge.bg-light.text-dark.me-1= member.username
+                else
+                  small.text-muted Nema članova
+              td
+                a.btn.btn-sm.btn-info.me-1(href='/projects/' + project._id) Pregled
+                a.btn.btn-sm.btn-warning.me-1(href='/projects/' + project._id + '/edit') Uredi
+                form.d-inline(action='/projects/' + project._id + '?_method=DELETE', method="POST")
+                  button.btn.btn-sm.btn-danger(type="submit") Obriši
+    else
+      .alert.alert-info Nema projekata gdje ste voditelj

@@ -1,27 +1,73 @@
 extends ../layout
 
 block content
-  h1.text-center Uredi projekt
-  form(method="POST" action="/projects/#{project._id}?_method=PUT")
-    .mb-3
-      label.form-label Naziv:
-      input.form-control(type="text" name="name" value=project.name required)
-    .mb-3
-      label.form-label Opis:
+  include ../includes/nav
+  
+  h1 Uredi projekt: #{project.name}
+
+  form(method="POST" action=`/projects/${project._id}?_method=PUT`)
+    .form-group
+      label Naziv projekta
+      input.form-control(
+        type="text" 
+        name="name" 
+        value=project.name 
+        required
+      )
+
+    .form-group
+      label Opis
       textarea.form-control(name="description")= project.description
-    .mb-3
-      label.form-label Cijena:
-      input.form-control(type="number" name="price" value=project.price)
-    .mb-3
-      label.form-label Obavljeni poslovi:
-      input.form-control(type="text" name="tasksCompleted" value=project.tasksCompleted)
-    .mb-3
-      label.form-label Datum početka:
-      input.form-control(type="date" name="startDate" value=project.startDate.toISOString().substring(0,10))
-    .mb-3
-      label.form-label Datum završetka:
-      input.form-control(type="date" name="endDate" value=project.endDate ? project.endDate.toISOString().substring(0,10) : '')
-    .mb-3
-      label.form-label Članovi tima (odvojeni zarezom):
-      input.form-control(type="text" name="teamMembers" value=project.teamMembers.join(', '))
-    button.btn.btn-success(type="submit") Spremi promjene
+
+    .form-group
+      label Cijena
+      input.form-control(
+        type="number" 
+        name="price" 
+        value=project.price 
+        required
+      )
+
+    .form-group
+      label Datum početka
+      input.form-control(
+        type="date" 
+        name="startDate" 
+        value=project.startDate.toISOString().substr(0,10) 
+        required
+      )
+
+    .form-group
+      label Datum završetka
+      input.form-control(
+        type="date" 
+        name="endDate" 
+        value=project.endDate.toISOString().substr(0,10) 
+        required
+      )
+
+    .form-group
+      label Obavljeni poslovi:
+      input.form-control(
+        type="text"
+        name="tasksCompleted"
+        value=project.tasksCompleted || ''
+      )
+
+    .form-group
+      label Članovi tima:
+      each user in users
+        .form-check
+          input.form-check-input(
+            type="checkbox" 
+            name="teamMembers[]"  
+            value=user._id
+            checked=user.isSelected 
+          )
+          label.form-check-label= user.username
+
+    .form-group.mt-4.d-flex.align-items-center
+      input.form-check-input.me-2(type="checkbox" name="archived" checked=project.archived)
+      label.form-check-label.mb-0 Arhiviraj projekt
+
+    button.btn.btn-primary.mt-4(type="submit") Spremi promjene

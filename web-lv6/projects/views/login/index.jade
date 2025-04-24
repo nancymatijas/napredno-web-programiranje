@@ -1,0 +1,18 @@
+extends ../layout
+
+block content
+  h1 Prijava
+
+  if error
+    .alert.alert-danger #{error}
+
+  form(method='POST' action='/login')
+    .form-group
+      label(for='usernameOrEmail') Korisničko ime ili Email:
+      input.form-control(type='text' name='usernameOrEmail' value=data.usernameOrEmail required)
+
+    .form-group
+      label(for='password') Lozinka:
+      input.form-control(type='password' name='password' required)
+
+    button.btn.btn-primary(type='submit') Prijavi se

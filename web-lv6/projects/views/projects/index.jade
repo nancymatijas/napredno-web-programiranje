@@ -1,23 +1,13 @@
 extends ../layout
 
 block content
+  include ../includes/nav
+
   h1.text-center Projekti
-  a.btn.btn-primary(href="/projects/new") Novi projekt
-  table.table.table-striped.table-bordered.mt-4
-    thead
-      tr
-        th Naziv
-        th Cijena
-        th Početak
-        th Akcije
-    tbody
-      each project in projects
-        tr
-          td= project.name
-          td= project.price
-          td= project.startDate.toLocaleDateString()
-          td.d-flex.justify-content-center
-            a.btn.btn-info.me-2(href='/projects/' + project._id) Pregled
-            a.btn.btn-warning.me-2(href='/projects/' + project._id + '/edit') Uredi
-            form(action='/projects/' + project._id + '?_method=DELETE', method="POST")
-              button.btn.btn-danger(type="submit") Obriši
+
+  .d-flex.justify-content-center.gap-3.mt-5
+    a.btn.btn-primary.btn-lg(href="/projects/new") Novi projekt
+    a.btn.btn-success.btn-lg(href="/projects/leader") Moji projekti kao voditelj
+    a.btn.btn-info.btn-lg(href="/projects/member") Moji projekti kao član
+    a.btn.btn-secondary.btn-lg(href="/projects/archive") Arhiva projekata
+

@@ -1,0 +1,22 @@
+extends ../layout
+
+block content
+  h1 Registracija
+
+  if error
+    .alert.alert-danger #{error}
+
+  form(method='POST' action='/register')
+    .form-group
+      label(for='username') Korisničko ime:
+      input.form-control(type='text' name='username' value=data.username required)
+
+    .form-group
+      label(for='email') Email:
+      input.form-control(type='email' name='email' value=data.email required)
+
+    .form-group
+      label(for='password') Lozinka:
+      input.form-control(type='password' name='password' required)
+
+    button.btn.btn-primary(type='submit') Registriraj se

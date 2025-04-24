@@ -4,62 +4,64 @@ var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
 var methodOverride = require('method-override');
+var session = require('express-session');
 
 var db = require('./models/db');
+const User = require('./models/User'); 
+
 var Project = require('./models/Project');
 
 var indexRouter = require('./routes/index');
 var projectsRouter = require('./routes/projects');
+var registerRouter = require('./routes/register');
+var loginRouter = require('./routes/login');
+var logoutRouter = require('./routes/logout'); 
 
 var app = express();
 
-// Povezivanje s MongoDB bazom podataka
 const mongoose = require('mongoose');
 mongoose.connect('mongodb://localhost/projectsDB', {
   useNewUrlParser: true,
   useUnifiedTopology: true,
-});
+})
+.then(() => console.log('Connected to MongoDB'))
+.catch(err => console.error('MongoDB connection error:', err));
 
-// Middleware za method override (PUT i DELETE preko POST)
 app.use(methodOverride('_method'));
-
-// View engine setup
-app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
-
-// Middleware za logiranje, parsiranje tijela zahtjeva i kolačića
-app.use(logger('dev'));
 app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: false }));
+app.use(bodyParser.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
-// Rute za aplikaciju
+app.use(session({
+  secret: 'secret_key', 
+  resave: false, 
+  saveUninitialized: false, 
+  cookie: { maxAge: 1000 * 60 * 60 * 24 } 
+}));
+
+app.set('views', path.join(__dirname, 'views'));
+app.set('view engine', 'jade');
+
+app.use(logger('dev'));
 app.use('/', indexRouter);
 app.use('/projects', projectsRouter);
+app.use('/register', registerRouter); 
+app.use('/login', loginRouter); 
+app.use('/logout', logoutRouter);
 
-// Error handleri za 404 i ostale greške
-app.use(function (req, res, next) {
-  var err = new Error('Not Found');
-  err.status = 404;
-  next(err);
+app.use((req, res, next) => {
+  res.status(404).render('404', {
+    title: 'Stranica nije pronađena',
+    url: req.url
+  });
 });
 
-if (app.get('env') === 'development') {
-  app.use(function (err, req, res, next) {
-    res.status(err.status || 500);
-    res.render('error', {
-      message: err.message,
-      error: err,
-    });
-  });
-}
-
-app.use(function (err, req, res, next) {
+app.use((err, req, res, next) => {
   res.status(err.status || 500);
   res.render('error', {
     message: err.message,
-    error: {},
+    error: app.get('env') === 'development' ? err : {}
   });
 });
 
